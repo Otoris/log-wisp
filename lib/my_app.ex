@@ -3,38 +3,46 @@ defmodule MyApp do
   @moduledoc """
   Main entry point for the application.
   """
-  @doc """
-  Starts the GenServer with the given filename!
-  """
-  @spec start_link(String.t()) :: {:ok, pid()} | {:error, term()}
+
+  @spec start_link(any()) :: :ignore | {:error, any()} | {:ok, pid()}
   def start_link(filename) do
-    case File.read(filename) do
-      {:ok, _contents} ->
-        GenServer.start_link(__MODULE__, filename, name: __MODULE__)
-      {:error, reason} ->
-        {:error, reason}
+    GenServer.start_link(__MODULE__, filename)
+  end
+
+  def init(filename) do
+    {:ok, watcher_pid} = FileSystem.start_link(dirs: ["../"], file: filename)
+    FileSystem.subscribe(watcher_pid)
+    initial_content = File.read!(filename)
+    {:ok, %{watcher_pid: watcher_pid, filename: filename, last_content: initial_content}}
+  end
+
+  def handle_info({:file_event, watcher_pid, {path, events}},
+    %{watcher_pid: watcher_pid, filename: filename, last_content: last_content} = state) do
+
+    if Path.basename(path) == filename and :modified in events do
+      new_content = File.read!(path)
+      new_lines = find_new_lines(last_content, new_content)
+
+      Enum.each(new_lines, fn line ->
+        IO.puts("New line: #{line}")
+      end)
+
+      {:noreply, %{state | last_content: new_content}}
+    else
+      {:noreply, state}
     end
   end
 
-  @doc """
-  Tries to read minecraft_fabric.log and returns the first line. Otherwise, it returns an error message.
-  """
-  @impl true
-  @spec init(String.t()) :: {:ok, pid()} | {:error, term()}
-  def init(filename) do
-    # Read file contents minecraft_fabric.log
-    stream_file(filename)
-    {:ok, filename}
+  def handle_info({:file_event, watcher_pid, :stop}, %{watcher_pid: watcher_pid} = state) do
+    # Your own logic when monitor stop
+    IO.puts("Stopping wisp watcher")
+    {:noreply, state}
   end
 
-  defp stream_file(filename) do
-    Task.start(fn ->
-      File.stream!(filename, [])
-      |> Stream.each(fn line ->
-        IO.puts(line)
-        send(self(), {:line, line})
-      end)
-      |> Stream.run()
-    end)
+  defp find_new_lines(old_content, new_content) do
+    old_lines = String.split(old_content, "\n")
+    new_lines = String.split(new_content, "\n")
+    new_lines -- old_lines
   end
+
 end
