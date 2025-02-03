@@ -1,6 +1,7 @@
 %{
   "file_system": {:git, "https://github.com/falood/file_system.git", "dc8f7d6cd7cfd492ebff7a53a58800c213d457bb", []},
   "fs": {:git, "https://github.com/synrc/fs.git", "e2a87f32edb5fb9068c632c3f7e69e217a967f85", []},
+  "jason": {:hex, :jason, "1.4.4", "b9226785a9aa77b6857ca22832cffa5d5011a667207eb2a0ad56adb5db443b8a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b"},
   "mix_rebar3": {:hex, :mix_rebar3, "0.2.0", "b33656ef3047f21a19fac3254cb30a1d2c75ea419a3ad28c4b88f42c62a4202d", [:mix], [], "hexpm", "11eabb70c0a7ead9aa3631f048c3d7d5e868172b87b6493d0dc6f6d591c1afae"},
   "mix_test_watch": {:hex, :mix_test_watch, "1.2.0", "1f9acd9e1104f62f280e30fc2243ae5e6d8ddc2f7f4dc9bceb454b9a41c82b42", [:mix], [{:file_system, "~> 0.2 or ~> 1.0", [hex: :file_system, repo: "hexpm", optional: false]}], "hexpm", "278dc955c20b3fb9a3168b5c2493c2e5cffad133548d307e0a50c7f2cfbf34f6"},
 }

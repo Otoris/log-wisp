@@ -16,6 +16,7 @@ defmodule MyApp do
     {:ok, watcher_pid} = FileSystem.start_link(dirs: ["../"])
     FileSystem.subscribe(watcher_pid)
     initial_content = File.read!(filename)
+    WispConfig.load_config("default.config.json")
 
     {:ok,
      %{

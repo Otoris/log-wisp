@@ -25,7 +25,8 @@ defmodule LogWisp.MixProject do
   defp deps do
     [
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:file_system, github: "falood/file_system", override: true}
+      {:file_system, github: "falood/file_system", override: true},
+      {:jason, "~> 1.4"}
     ]
   end
 end
