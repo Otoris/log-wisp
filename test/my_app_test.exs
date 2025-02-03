@@ -30,7 +30,6 @@ defmodule MyAppTest do
       initial_content = "line1\nline2"
       File.write!(test_file, initial_content)
 
-      # Return test_file and initial_content as part of the context.
       on_exit(fn -> File.rm(test_file) end)
       {:ok, test_file: test_file, initial_content: initial_content}
     end
@@ -84,7 +83,6 @@ defmodule MyAppTest do
         last_line: nil
       }
 
-      # Update file but send a different event type (e.g. :created)
       new_content = initial_content <> "\nline3"
       File.write!(test_file, new_content)
 

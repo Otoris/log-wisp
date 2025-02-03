@@ -28,7 +28,6 @@ defmodule MyApp do
   @impl true
   def handle_info({:file_event, _watcher_pid, {path, events}}, state) do
     if file_modified?(path, events, state) do
-      # Use the "path" from the message instead of state.path, which doesn't exist.
       new_content = File.read!(path)
       new_lines = extract_new_lines(state.last_content, new_content)
       last_line = extract_last_line(new_lines, state.last_line)
